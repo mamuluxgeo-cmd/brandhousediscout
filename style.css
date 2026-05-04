@@ -9,67 +9,201 @@ html {
 
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: Arial, sans-serif;
-  background: #f3f4f6;
+  background:
+    radial-gradient(circle at top left, #c7d2fe 0%, transparent 35%),
+    radial-gradient(circle at bottom right, #fbcfe8 0%, transparent 35%),
+    linear-gradient(135deg, #eef2ff, #f8fafc);
+  color: #111827;
 }
 
 .app {
-  max-width: 500px;
+  max-width: 560px;
   margin: auto;
-  padding: 20px;
+  padding: 28px 18px;
 }
 
-h1 {
+.hero {
   text-align: center;
+  margin-bottom: 22px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.hero p {
+  margin: 10px 0 0;
+  color: #6b7280;
+  font-size: 15px;
 }
 
 .card {
-  background: white;
-  padding: 20px;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(18px);
+  padding: 22px;
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(31, 41, 55, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+label,
+.brands-title {
+  display: block;
+  margin-bottom: 9px;
+  font-weight: 800;
+  font-size: 15px;
 }
 
 input {
   width: 100%;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
+  padding: 16px 18px;
+  border-radius: 18px;
+  border: 2px solid #111827;
   margin-bottom: 20px;
-  font-size: 16px;
+  font-size: 17px;
+  outline: none;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+input:focus {
+  box-shadow: 0 0 0 5px rgba(99, 102, 241, 0.18);
 }
 
 .brands {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
 }
 
 .brand-btn {
+  min-height: 74px;
   padding: 14px;
-  border-radius: 14px;
-  border: 1px solid #ddd;
-  background: #f9fafb;
+  border: none;
+  border-radius: 22px;
   cursor: pointer;
-  font-weight: bold;
-  transition: 0.2s;
+  color: white;
+  font-weight: 900;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.16);
+  transition: 0.2s ease;
+}
+
+.brand-btn::before {
+  content: "";
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  right: -40px;
+  top: -45px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+}
+
+.brand-btn::after {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  right: 18px;
+  bottom: -35px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 50%;
+}
+
+.brand-btn span {
+  display: block;
+  position: relative;
+  z-index: 2;
+}
+
+.brand-name {
+  font-size: 16px;
+}
+
+.brand-discount {
+  margin-top: 8px;
+  font-size: 14px;
+  opacity: 0.92;
 }
 
 .brand-btn.active {
-  background: #111827;
-  color: white;
-  transform: scale(1.05);
+  transform: translateY(-3px) scale(1.035);
+  box-shadow: 0 18px 38px rgba(15, 23, 42, 0.28);
+  outline: 4px solid rgba(255, 255, 255, 0.85);
+}
+
+.brand-btn:nth-child(6n+1) {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.brand-btn:nth-child(6n+2) {
+  background: linear-gradient(135deg, #06b6d4, #2563eb);
+}
+
+.brand-btn:nth-child(6n+3) {
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+}
+
+.brand-btn:nth-child(6n+4) {
+  background: linear-gradient(135deg, #22c55e, #14b8a6);
+}
+
+.brand-btn:nth-child(6n+5) {
+  background: linear-gradient(135deg, #f97316, #ef4444);
+}
+
+.brand-btn:nth-child(6n+6) {
+  background: linear-gradient(135deg, #111827, #475569);
 }
 
 .result {
-  margin-top: 20px;
-  padding: 15px;
-  background: #f9fafb;
-  border-radius: 14px;
+  margin-top: 22px;
+  padding: 18px;
+  background: rgba(249, 250, 251, 0.9);
+  border-radius: 20px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.result span {
+  color: #374151;
+  font-weight: 700;
 }
 
 .result strong {
-  font-size: 22px;
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.loading {
+  grid-column: 1 / -1;
+  padding: 18px;
+  text-align: center;
+  color: #6b7280;
+}
+
+@media (max-width: 480px) {
+  .hero h1 {
+    font-size: 25px;
+  }
+
+  .card {
+    padding: 18px;
+  }
+
+  .brands {
+    grid-template-columns: 1fr;
+  }
+
+  .brand-btn {
+    min-height: 68px;
+  }
 }
