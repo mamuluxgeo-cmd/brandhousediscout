@@ -10,47 +10,65 @@ const resultEl = document.getElementById("result");
 
 let selectedDiscount = 0;
 
-async function loadBrands() {
-  const cachedBrands = localStorage.getItem(CACHE_KEY);
-  const cachedTime = Number(localStorage.getItem(CACHE_TIME_KEY));
-  const now = Date.now();
+function getCachedBrands() {
+  try {
+    const cachedBrands = localStorage.getItem(CACHE_KEY);
+    if (!cachedBrands) return null;
 
-  if (cachedBrands && cachedTime && now - cachedTime < CACHE_DURATION) {
-    renderBrands(JSON.parse(cachedBrands));
-    return;
+    return JSON.parse(cachedBrands);
+  } catch {
+    return null;
+  }
+}
+
+function saveCache(data) {
+  localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+  localStorage.setItem(CACHE_TIME_KEY, String(Date.now()));
+}
+
+function isCacheFresh() {
+  const cachedTime = Number(localStorage.getItem(CACHE_TIME_KEY));
+  if (!cachedTime) return false;
+
+  return Date.now() - cachedTime < CACHE_DURATION;
+}
+
+async function loadBrands() {
+  const cachedBrands = getCachedBrands();
+
+  if (cachedBrands && cachedBrands.length) {
+    renderBrands(cachedBrands);
+
+    if (isCacheFresh()) return;
   }
 
   try {
-    const res = await fetch(API);
-    const data = await res.json();
+    const response = await fetch(API, {
+      cache: "no-store"
+    });
 
-    localStorage.setItem(CACHE_KEY, JSON.stringify(data));
-    localStorage.setItem(CACHE_TIME_KEY, String(now));
+    const data = await response.json();
 
-    renderBrands(data);
-  } catch (error) {
-    if (cachedBrands) {
-      renderBrands(JSON.parse(cachedBrands));
-      return;
+    if (data && data.length) {
+      saveCache(data);
+      renderBrands(data);
     }
-
-    brandsContainer.innerHTML = `<div class="loading">მონაცემები ვერ ჩაიტვირთა</div>`;
+  } catch (error) {
     console.error(error);
   }
 }
 
 function renderBrands(data) {
-  if (!data || data.length === 0) {
-    brandsContainer.innerHTML = `<div class="loading">ბრენდები ჯერ დამატებული არ არის</div>`;
-    return;
-  }
+  brandsContainer.innerHTML = data.map(brand => {
+    const discount = Number(brand.discount);
 
-  brandsContainer.innerHTML = data.map(brand => `
-    <button class="brand-btn" data-discount="${brand.discount}">
-      <span class="brand-name">${brand.name}</span>
-      <span class="brand-discount">-${Math.round(brand.discount)}%</span>
-    </button>
-  `).join("");
+    return `
+      <button class="brand-btn" data-discount="${discount}">
+        <span class="brand-name">${brand.name}</span>
+        <span class="brand-discount">-${Math.round(discount)}%</span>
+      </button>
+    `;
+  }).join("");
 
   document.querySelectorAll(".brand-btn").forEach(button => {
     button.addEventListener("click", () => {
@@ -79,8 +97,8 @@ function calculate() {
 
 priceInput.addEventListener("input", calculate);
 
-document.addEventListener("gesturestart", function (e) {
-  e.preventDefault();
+document.addEventListener("gesturestart", function (event) {
+  event.preventDefault();
 });
 
 loadBrands();
