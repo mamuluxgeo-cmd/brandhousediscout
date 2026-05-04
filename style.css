@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  touch-action: manipulation;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f4f6;
+}
+
+.app {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+input {
+  width: 100%;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.brands {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.brand-btn {
+  padding: 14px;
+  border-radius: 14px;
+  border: 1px solid #ddd;
+  background: #f9fafb;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.brand-btn.active {
+  background: #111827;
+  color: white;
+  transform: scale(1.05);
+}
+
+.result {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9fafb;
+  border-radius: 14px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.result strong {
+  font-size: 22px;
+}
