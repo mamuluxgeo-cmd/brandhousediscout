@@ -1,8 +1,8 @@
 const API = "https://script.google.com/macros/s/AKfycbycf1cw8dNZJ5zC6gL9BgZ0uzlC-aDdtAtBtkB2Vwfi9-u7846J1O14GXf-lxunWoWu/exec";
 
-const CACHE_KEY = "bh_discount_brands_cache";
-const CACHE_TIME_KEY = "bh_discount_brands_cache_time";
-const CACHE_DURATION = 10 * 60 * 1000;
+const CACHE_KEY = "bh_discount_brands_cache_v2";
+const CACHE_TIME_KEY = "bh_discount_brands_cache_time_v2";
+const CACHE_DURATION = 1 * 60 * 1000;
 
 const priceInput = document.getElementById("price");
 const brandsContainer = document.getElementById("brands");
@@ -14,7 +14,6 @@ function getCachedBrands() {
   try {
     const cachedBrands = localStorage.getItem(CACHE_KEY);
     if (!cachedBrands) return null;
-
     return JSON.parse(cachedBrands);
   } catch {
     return null;
@@ -29,7 +28,6 @@ function saveCache(data) {
 function isCacheFresh() {
   const cachedTime = Number(localStorage.getItem(CACHE_TIME_KEY));
   if (!cachedTime) return false;
-
   return Date.now() - cachedTime < CACHE_DURATION;
 }
 
@@ -38,12 +36,17 @@ async function loadBrands() {
 
   if (cachedBrands && cachedBrands.length) {
     renderBrands(cachedBrands);
+  }
 
-    if (isCacheFresh()) return;
+  if (cachedBrands && cachedBrands.length && isCacheFresh()) {
+    return;
   }
 
   try {
-    const response = await fetch(API, {
+    const freshUrl = API + "?t=" + Date.now();
+
+    const response = await fetch(freshUrl, {
+      method: "GET",
       cache: "no-store"
     });
 
